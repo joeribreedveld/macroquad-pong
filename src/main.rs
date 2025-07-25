@@ -1,6 +1,7 @@
 pub mod constants;
 
 mod ball;
+mod collisions;
 mod paddle;
 
 use macroquad::prelude::*;
@@ -60,6 +61,18 @@ async fn main() {
         paddle_right.update(delta_time, screen_height);
 
         ball.update(delta_time, screen_width, screen_height);
+
+        let circle = ball.circle();
+
+        let rect1: Rect = paddle_left.rect();
+        let rect2: Rect = paddle_right.rect();
+
+        if circle.overlaps_rect(&rect1) || circle.overlaps_rect(&rect2) {
+            let min = rect1.left() + circle.r;
+            let max = rect2.right() - circle.r;
+
+            ball.reflect_x(min, max);
+        }
 
         paddle_left.draw();
         paddle_right.draw();

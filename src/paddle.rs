@@ -87,4 +87,8 @@ impl Paddle {
             self.dir *= -1;
         }
     }
+
+    pub fn rect(&self) -> Rect {
+        Rect::new(self.position.x, self.position.y, self.size.x, self.size.y)
+    }
 }

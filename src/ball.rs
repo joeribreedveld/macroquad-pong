@@ -57,4 +57,14 @@ impl Ball {
             self.velocity.y *= -1.0;
         }
     }
+
+    pub fn reflect_x(&mut self, min: f32, max: f32) {
+        self.velocity.x *= -1.0;
+
+        self.position.x = clamp(self.position.x, min, max);
+    }
+
+    pub fn circle(&self) -> Circle {
+        Circle::new(self.position.x, self.position.y, self.radius)
+    }
 }
