@@ -7,9 +7,9 @@ use crate::{constants::*, paddle::*};
 
 fn window_conf() -> Conf {
     Conf {
-        window_title: "Pong".to_string(),
-        window_width: 800,
-        window_height: 600,
+        window_title: WINDOW_TITLE.to_string(),
+        window_width: WINDOW_WIDTH,
+        window_height: WINDOW_HEIGHT,
         ..Default::default()
     }
 }
