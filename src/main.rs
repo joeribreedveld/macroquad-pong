@@ -1,9 +1,11 @@
 pub mod constants;
+
+mod ball;
 mod paddle;
 
 use macroquad::prelude::*;
 
-use crate::{constants::*, paddle::*};
+use crate::{ball::*, constants::*, paddle::*};
 
 fn window_conf() -> Conf {
     Conf {
@@ -16,32 +18,33 @@ fn window_conf() -> Conf {
 
 #[macroquad::main(window_conf)]
 async fn main() {
-    let screen_height_middle: f32 = screen_height() / 2.0;
+    let screen_width: f32 = screen_width();
+    let screen_height: f32 = screen_height();
 
-    let mut paddle_left = Paddle::new(
-        Vec2 {
-            x: PADDLE_SIDE_OFFSET,
-            y: screen_height_middle,
-        },
-        Vec2 {
-            x: PADDLE_WIDTH,
-            y: PADDLE_HEIGHT,
-        },
+    let screen_center: Vec2 = Vec2::new(screen_width / 2.0, screen_height / 2.0);
+
+    let mut paddle_left: Paddle = Paddle::new(
+        Vec2::new(PADDLE_SIDE_OFFSET, screen_center.y),
+        Vec2::new(PADDLE_WIDTH, PADDLE_HEIGHT),
         PaddleSide::LEFT,
         0,
     );
 
-    let mut paddle_right = Paddle::new(
-        Vec2 {
-            x: screen_width() - PADDLE_SIDE_OFFSET - PADDLE_WIDTH,
-            y: screen_height_middle,
-        },
-        Vec2 {
-            x: PADDLE_WIDTH,
-            y: PADDLE_HEIGHT,
-        },
+    let mut paddle_right: Paddle = Paddle::new(
+        Vec2::new(
+            screen_width - PADDLE_SIDE_OFFSET - PADDLE_WIDTH,
+            screen_center.y,
+        ),
+        Vec2::new(PADDLE_WIDTH, PADDLE_HEIGHT),
         PaddleSide::RIGHT,
         1,
+    );
+
+    let mut ball: Ball = Ball::new(
+        screen_center,
+        BALL_RADIUS,
+        Vec2::new(1.0, 1.0).normalize(),
+        BALL_SPEED,
     );
 
     let delta_time: f32 = get_frame_time();
@@ -49,11 +52,15 @@ async fn main() {
     loop {
         clear_background(BLACK);
 
-        paddle_left.update(delta_time);
-        paddle_right.update(delta_time);
+        paddle_left.update(delta_time, screen_height);
+        paddle_right.update(delta_time, screen_height);
+
+        ball.update(delta_time, screen_width, screen_height);
 
         paddle_left.draw();
         paddle_right.draw();
+
+        ball.draw();
 
         next_frame().await;
     }
