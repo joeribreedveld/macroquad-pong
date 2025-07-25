@@ -1,7 +1,5 @@
 use macroquad::prelude::*;
 
-use crate::constants::*;
-
 pub enum PaddleSide {
     LEFT,
     RIGHT,
@@ -10,17 +8,28 @@ pub enum PaddleSide {
 pub struct Paddle {
     position: Vec2,
     dir: i32,
+    speed: f32,
     size: Vec2,
     side: PaddleSide,
+    color: Color,
 }
 
 impl Paddle {
-    pub fn new(position: Vec2, size: Vec2, side: PaddleSide, dir: i32) -> Self {
+    pub fn new(
+        position: Vec2,
+        dir: i32,
+        speed: f32,
+        size: Vec2,
+        side: PaddleSide,
+        color: Color,
+    ) -> Self {
         Self {
             position,
             dir,
+            speed,
             size,
             side,
+            color,
         }
     }
 
@@ -30,7 +39,7 @@ impl Paddle {
             self.position.y,
             self.size.x,
             self.size.y,
-            PADDLE_COLOR,
+            self.color,
         );
     }
 
@@ -59,7 +68,7 @@ impl Paddle {
         }
 
         self.position.y = clamp(
-            self.position.y + self.dir as f32 * PADDLE_SPEED * delta_time,
+            self.position.y + self.dir as f32 * self.speed * delta_time,
             min,
             max,
         );
@@ -69,7 +78,7 @@ impl Paddle {
 
     fn update_right(&mut self, delta_time: f32, min: f32, max: f32) {
         self.position.y = clamp(
-            self.position.y + PADDLE_SPEED * delta_time * self.dir as f32,
+            self.position.y + self.speed * delta_time * self.dir as f32,
             min,
             max,
         );

@@ -25,9 +25,11 @@ async fn main() {
 
     let mut paddle_left: Paddle = Paddle::new(
         Vec2::new(PADDLE_SIDE_OFFSET, screen_center.y),
+        0,
+        PADDLE_SPEED.to_owned(),
         Vec2::new(PADDLE_WIDTH, PADDLE_HEIGHT),
         PaddleSide::LEFT,
-        0,
+        WHITE,
     );
 
     let mut paddle_right: Paddle = Paddle::new(
@@ -35,9 +37,11 @@ async fn main() {
             screen_width - PADDLE_SIDE_OFFSET - PADDLE_WIDTH,
             screen_center.y,
         ),
+        1,
+        PADDLE_SPEED.to_owned(),
         Vec2::new(PADDLE_WIDTH, PADDLE_HEIGHT),
         PaddleSide::RIGHT,
-        1,
+        WHITE,
     );
 
     let mut ball: Ball = Ball::new(
